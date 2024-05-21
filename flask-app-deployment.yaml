@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-mongo-app
+  labels:
+    app: flask-mongo-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: flask-mongo-app
+  template:
+    metadata:
+      labels:
+        app: flask-mongo-app
+    spec:
+      containers:
+      - name: flask-mongo-app
+        image: your_registry/flask-mongo-app:latest
+        ports:
+        - containerPort: 5000
+        env:
+        - name: MONGO_URI
+          value: "mongodb://your_mongo_host:your_mongo_port/your_database"
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "250m"
+          limits:
+            memory: "256Mi"
+            cpu: "500m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: flask-mongo-service
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+      targetPort: 5000
+  selector:
+    app: flask-mongo-app

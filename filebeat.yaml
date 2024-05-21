@@ -1,0 +1,8 @@
+filebeat.inputs:
+- type: log
+  enabled: true
+  paths:
+    - /path/to/your/application/logs/*.log
+
+output.elasticsearch:
+  hosts: ["locahost:9200"]
